@@ -21,6 +21,14 @@ const App = () => {
     );
   }, []);
 
+  useEffect(() => {
+    const localToken = window.localStorage.getItem(localStorageKey);
+    if (localToken) {
+      const transformedToken = JSON.parse(localToken);
+      setUser(transformedToken);
+    }
+  }, []);
+
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
