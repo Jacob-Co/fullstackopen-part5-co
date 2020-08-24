@@ -13,6 +13,7 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
+  const localStorageKey = 'localBloggAppUser';
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -24,6 +25,7 @@ const App = () => {
     event.preventDefault();
     try {
       const token = await loginService.login({ username, password });
+      window.localStorage.setItem(localStorageKey, JSON.stringify(token));
       setUser(token);
       setUsername('');
       setPassword('');
