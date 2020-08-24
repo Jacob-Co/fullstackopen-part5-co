@@ -45,7 +45,11 @@ const App = () => {
         password={password}
         setPassword={setPassword}
       />
-      : <BlogList blogs={blogs}/>
+      : <div>
+        {user.name} logged in
+        <button>logout</button>
+        <BlogList blogs={blogs}/>
+        </div>
     }
     </>
   )
