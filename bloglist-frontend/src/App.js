@@ -44,6 +44,11 @@ const App = () => {
     }
   };
 
+  const handleLogout = () => {
+    window.localStorage.removeItem(localStorageKey);
+    window.location.reload();
+  }
+
   return (
     <>
     {
@@ -57,7 +62,7 @@ const App = () => {
       />
       : <div>
         {user.name} logged in
-        <button>logout</button>
+        <button onClick={handleLogout}>logout</button>
         <BlogList blogs={blogs}/>
         </div>
     }
