@@ -26,19 +26,21 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const localToken = window.localStorage.getItem(localStorageKey);
-    if (localToken) {
-      const transformedToken = JSON.parse(localToken);
-      setUser(transformedToken);
+    const localUser = window.localStorage.getItem(localStorageKey);
+    if (localUser) {
+      const transformedUser = JSON.parse(localUser);
+      setUser(transformedUser);
+      blogService.setToken(transformedUser.token);
     }
   }, []);
 
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const token = await loginService.login({ username, password });
-      window.localStorage.setItem(localStorageKey, JSON.stringify(token));
-      setUser(token);
+      const loginUser = await loginService.login({ username, password });
+      window.localStorage.setItem(localStorageKey, JSON.stringify(loginUser));
+      setUser(loginUser);
+      blogService.setToken(loginUser.token);
       setUsername('');
       setPassword('');
     } catch (e) {
@@ -54,8 +56,17 @@ const App = () => {
     setUser('');
   };
 
-  const addBlog = (event) => {
+  const addBlog = async (event) => {
     event.preventDefault();
+    try {
+      const returnedBlog = await blogService.postBlog({title, author, url});
+      setTitle('');
+      setAuthor('');
+      setUrl('');
+      setBlogs(blogs.concat(returnedBlog));
+    } catch (e) {
+      alert('missing title, author or url');
+    }
   };
 
   return (
