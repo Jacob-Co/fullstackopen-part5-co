@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 // Components
 import BlogList from './components/BlogList';
 import Login from './components/Login';
+import CreateBlog from './components/CreateBlog';
 
 // Server Request Helpers
 import blogService from './services/blogs';
@@ -13,6 +14,9 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [url, setUrl] = useState('');
   const localStorageKey = 'localBloggAppUser';
 
   useEffect(() => {
@@ -47,7 +51,12 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem(localStorageKey);
     window.location.reload();
-  }
+    setUser('');
+  };
+
+  const addBlog = (event) => {
+    event.preventDefault();
+  };
 
   return (
     <>
@@ -63,6 +72,16 @@ const App = () => {
       : <div>
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
+        
+        <CreateBlog
+          addBlog={addBlog}
+          title={title}
+          setTitle={setTitle}
+          author={author}
+          setAuthor={setAuthor}
+          url={url}
+          setUrl={setUrl}
+        />
         <BlogList blogs={blogs}/>
         </div>
     }

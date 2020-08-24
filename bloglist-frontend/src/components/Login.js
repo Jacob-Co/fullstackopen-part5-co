@@ -1,6 +1,6 @@
 import React from 'react';
 
-const login = ({ handleLogin, username, setUsername, password, setPassword }) => (
+const Login = ({ handleLogin, username, setUsername, password, setPassword }) => (
   <div>
   <h2>Log in to Application</h2>
   <form onSubmit={handleLogin}>
@@ -27,4 +27,4 @@ const login = ({ handleLogin, username, setUsername, password, setPassword }) =>
 </div>
 )
 
-export default login;
+export default Login;
