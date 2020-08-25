@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import BlogList from './components/BlogList';
 import Login from './components/Login';
 import CreateBlog from './components/CreateBlog';
+import Notification from './components/Notification';
 
 // Server Request Helpers
 import blogService from './services/blogs';
@@ -18,6 +19,8 @@ const App = () => {
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
   const localStorageKey = 'localBloggAppUser';
+  const [message, setMessage] = useState(null);
+  const [notifType, setNotifType] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -34,6 +37,12 @@ const App = () => {
     }
   }, []);
 
+  const setNotification = (message, type) => {
+    setMessage(message);
+    setNotifType(type);
+    setTimeout(() => setMessage(null), 5000);
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
@@ -41,19 +50,19 @@ const App = () => {
       window.localStorage.setItem(localStorageKey, JSON.stringify(loginUser));
       setUser(loginUser);
       blogService.setToken(loginUser.token);
-      setUsername('');
-      setPassword('');
+      setNotification('Successfully signed in', 'success');
     } catch (e) {
-      alert('Invalid username of password');
-      setUsername('');
-      setPassword('');
+      setNotification('Invalid username or password', 'warning');
     }
+    setUsername('');
+    setPassword('');
   };
 
   const handleLogout = () => {
     window.localStorage.removeItem(localStorageKey);
     window.location.reload();
     setUser('');
+    setNotification('Successfully signed out', 'warning');
   };
 
   const addBlog = async (event) => {
@@ -64,13 +73,15 @@ const App = () => {
       setAuthor('');
       setUrl('');
       setBlogs(blogs.concat(returnedBlog));
+      setNotification(`Added new blog ${returnedBlog.title}`, 'success');
     } catch (e) {
-      alert('missing title, author or url');
+      setNotification('Missing title, author or url', 'warning');
     }
   };
 
   return (
     <>
+    <Notification message={message} type={notifType} />
     {
       user === null 
       ? <Login 
