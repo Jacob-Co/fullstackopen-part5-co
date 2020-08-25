@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // Components
 import BlogList from './components/BlogList';
@@ -22,6 +22,8 @@ const App = () => {
   const localStorageKey = 'localBloggAppUser';
   const [message, setMessage] = useState(null);
   const [notifType, setNotifType] = useState(null);
+
+  const toggleCreateBlogRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -70,6 +72,7 @@ const App = () => {
     event.preventDefault();
     try {
       const returnedBlog = await blogService.postBlog({title, author, url});
+      toggleCreateBlogRef.current.toggleVisibility();
       setTitle('');
       setAuthor('');
       setUrl('');
@@ -95,7 +98,7 @@ const App = () => {
       : <div>
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
-        <Toggable label='create a new blog'>
+        <Toggable label='create a new blog' ref={toggleCreateBlogRef}>
           <CreateBlog
             handleSubmit={addBlog}
             title={title}
