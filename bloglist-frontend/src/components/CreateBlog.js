@@ -1,16 +1,16 @@
 import React from 'react';
 
-const CreateBlog = ({addBlog, title, setTitle, author, setAuthor, url, setUrl}) => (
+const CreateBlog = ({handleSubmit, title, handleTitleChange, author, handleAuthorChange, url, handleUrlChange}) => (
   <div>
     <h2>Create New</h2>
-    <form onSubmit={addBlog}>
+    <form onSubmit={handleSubmit}>
       <div>
         title:
         <input
           type="text"
           name="Title"
           value={title}
-          onChange={({target}) => setTitle(target.value)}
+          onChange={({target}) => handleTitleChange(target.value)}
         />
       </div>
       <div>
@@ -19,7 +19,7 @@ const CreateBlog = ({addBlog, title, setTitle, author, setAuthor, url, setUrl}) 
           type="text"
           name="Author"
           value={author}
-          onChange={({target}) => setAuthor(target.value)}
+          onChange={({target}) => handleAuthorChange(target.value)}
         />
       </div>
       <div>
@@ -28,7 +28,7 @@ const CreateBlog = ({addBlog, title, setTitle, author, setAuthor, url, setUrl}) 
           type="text"
           name="Url"
           value={url}
-          onChange={({target}) => setUrl(target.value)}
+          onChange={({target}) => handleUrlChange(target.value)}
         />
     </div>
     <button>Create</button>

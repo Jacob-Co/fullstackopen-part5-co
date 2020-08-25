@@ -85,24 +85,24 @@ const App = () => {
     {
       user === null 
       ? <Login 
-        handleLogin={handleLogin} 
+        handleSubmit={handleLogin} 
         username={username}
-        setUsername={setUsername}
+        handleUsernameChange={setUsername}
         password={password}
-        setPassword={setPassword}
+        handlePasswordChange={setPassword}
       />
       : <div>
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
         
         <CreateBlog
-          addBlog={addBlog}
+          handleSubmit={addBlog}
           title={title}
-          setTitle={setTitle}
+          handleTitleChange={setTitle}
           author={author}
-          setAuthor={setAuthor}
+          handleAuthorChange={setAuthor}
           url={url}
-          setUrl={setUrl}
+          handleUrlChange={setUrl}
         />
         <BlogList blogs={blogs}/>
         </div>
