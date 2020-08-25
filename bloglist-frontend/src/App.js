@@ -5,6 +5,7 @@ import BlogList from './components/BlogList';
 import Login from './components/Login';
 import CreateBlog from './components/CreateBlog';
 import Notification from './components/Notification';
+import Toggable from './components/Toggable';
 
 // Server Request Helpers
 import blogService from './services/blogs';
@@ -94,16 +95,17 @@ const App = () => {
       : <div>
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
-        
-        <CreateBlog
-          handleSubmit={addBlog}
-          title={title}
-          handleTitleChange={setTitle}
-          author={author}
-          handleAuthorChange={setAuthor}
-          url={url}
-          handleUrlChange={setUrl}
-        />
+        <Toggable label='create a new blog'>
+          <CreateBlog
+            handleSubmit={addBlog}
+            title={title}
+            handleTitleChange={setTitle}
+            author={author}
+            handleAuthorChange={setAuthor}
+            url={url}
+            handleUrlChange={setUrl}
+          />
+        </Toggable>
         <BlogList blogs={blogs}/>
         </div>
     }
