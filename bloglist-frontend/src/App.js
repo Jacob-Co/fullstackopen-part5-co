@@ -16,9 +16,6 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
   const localStorageKey = 'localBloggAppUser';
   const [message, setMessage] = useState(null);
   const [notifType, setNotifType] = useState(null);
@@ -68,18 +65,16 @@ const App = () => {
     setNotification('Successfully signed out', 'warning');
   };
 
-  const addBlog = async (event) => {
-    event.preventDefault();
+  const addBlog = async (blogObj) => {
     try {
-      const returnedBlog = await blogService.postBlog({title, author, url});
+      const returnedBlog = await blogService.postBlog(blogObj);
       toggleCreateBlogRef.current.toggleVisibility();
-      setTitle('');
-      setAuthor('');
-      setUrl('');
       setBlogs(blogs.concat(returnedBlog));
       setNotification(`Added new blog ${returnedBlog.title}`, 'success');
+      return true
     } catch (e) {
       setNotification('Missing title, author or url', 'warning');
+      return false
     }
   };
 
@@ -100,13 +95,7 @@ const App = () => {
         <button onClick={handleLogout}>logout</button>
         <Toggable label='create a new blog' ref={toggleCreateBlogRef}>
           <CreateBlog
-            handleSubmit={addBlog}
-            title={title}
-            handleTitleChange={setTitle}
-            author={author}
-            handleAuthorChange={setAuthor}
-            url={url}
-            handleUrlChange={setUrl}
+            addBlog={addBlog}
           />
         </Toggable>
         <BlogList blogs={blogs}/>
