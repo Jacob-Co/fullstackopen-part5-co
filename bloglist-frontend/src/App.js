@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 // Components
 import BlogList from './components/BlogList';
 import Login from './components/Login';
-import CreateBlog from './components/CreateBlog';
+import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
 import Toggable from './components/Toggable';
 
@@ -20,7 +20,7 @@ const App = () => {
   const [message, setMessage] = useState(null);
   const [notifType, setNotifType] = useState(null);
 
-  const toggleCreateBlogRef = useRef();
+  const toggleBlogFormRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -68,7 +68,7 @@ const App = () => {
   const addBlog = async (blogObj) => {
     try {
       const returnedBlog = await blogService.postBlog(blogObj);
-      toggleCreateBlogRef.current.toggleVisibility();
+      toggleBlogFormRef.current.toggleVisibility();
       setBlogs(blogs.concat(returnedBlog));
       setNotification(`Added new blog ${returnedBlog.title}`, 'success');
       return true
@@ -77,6 +77,11 @@ const App = () => {
       return false
     }
   };
+
+  const addLike = async (blogObj) => {
+    const modifiedBlog = await blogService.putBlog(blogObj);
+    setBlogs(blogs.map(blog => blog.id === modifiedBlog.id ? modifiedBlog : blog));
+  }
 
   return (
     <>
@@ -93,12 +98,12 @@ const App = () => {
       : <div>
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
-        <Toggable label='create a new blog' ref={toggleCreateBlogRef}>
-          <CreateBlog
+        <Toggable label='create a new blog' ref={toggleBlogFormRef}>
+          <BlogForm
             addBlog={addBlog}
           />
         </Toggable>
-        <BlogList blogs={blogs}/>
+        <BlogList blogs={blogs} addLike={addLike}/>
         </div>
     }
     </>
