@@ -41,7 +41,7 @@ const App = () => {
     setMessage(message);
     setNotifType(type);
     setTimeout(() => setMessage(null), 5000);
-  }
+  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -71,17 +71,17 @@ const App = () => {
       toggleBlogFormRef.current.toggleVisibility();
       setBlogs(blogs.concat(returnedBlog));
       setNotification(`Added new blog ${returnedBlog.title}`, 'success');
-      return true
+      return true;
     } catch (e) {
       setNotification('Missing title, author or url', 'warning');
-      return false
+      return false;
     }
   };
 
   const addLike = async (blogObj) => {
     const modifiedBlog = await blogService.putBlog(blogObj);
     setBlogs(blogs.map(blog => blog.id === modifiedBlog.id ? modifiedBlog : blog));
-  }
+  };
 
   const removeBlog = async (blogObj) => {
     await blogService.deleteBlog(blogObj);
@@ -90,33 +90,33 @@ const App = () => {
 
   return (
     <>
-    <Notification message={message} type={notifType} />
-    {
-      user === null 
-      ? <Login 
-        handleSubmit={handleLogin} 
-        username={username}
-        handleUsernameChange={setUsername}
-        password={password}
-        handlePasswordChange={setPassword}
-      />
-      : <div>
-        {user.name} logged in
-        <button onClick={handleLogout}>logout</button>
-        <Toggable label='create a new blog' ref={toggleBlogFormRef}>
-          <BlogForm
-            addBlog={addBlog}
+      <Notification message={message} type={notifType} />
+      {
+        user === null
+          ? <Login
+            handleSubmit={handleLogin}
+            username={username}
+            handleUsernameChange={setUsername}
+            password={password}
+            handlePasswordChange={setPassword}
           />
-        </Toggable>
-        <BlogList
-          blogs={blogs}
-          addLike={addLike}
-          removeBlog={removeBlog}
-        />
-        </div>
-    }
+          : <div>
+            {user.name} logged in
+            <button onClick={handleLogout}>logout</button>
+            <Toggable label='create a new blog' ref={toggleBlogFormRef}>
+              <BlogForm
+                addBlog={addBlog}
+              />
+            </Toggable>
+            <BlogList
+              blogs={blogs}
+              addLike={addLike}
+              removeBlog={removeBlog}
+            />
+          </div>
+      }
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

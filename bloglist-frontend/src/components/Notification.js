@@ -2,7 +2,7 @@ import React from 'react';
 
 import '../component-styles/notification.css';
 
-const Notification = ({message, type}) => {
+const Notification = ({ message, type }) => {
   if (message === null) {
     return null;
   }
@@ -11,7 +11,7 @@ const Notification = ({message, type}) => {
     <div className={`notification ${type}`}>
       {message}
     </div>
-  )
+  );
 };
 
 export default Notification;
