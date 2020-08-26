@@ -33,8 +33,11 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.delete('/:id', async (request, response) => {
   const blog = await Blog.findById(request.params.id);
   if (!blog) return response.status(404).end();
-  if (request.token.id.toString() !== blog.user.toString()) {
+  if (!request.token) {
     return response.status(401).json({ error: 'invalid or missing token' });
+  }
+  if (request.token.id.toString() !== blog.user.toString()) {
+    return response.status(401).json({ error: 'Token does not match' });
   }
   await blog.remove();
   response.status(204).end();

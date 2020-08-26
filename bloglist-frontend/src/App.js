@@ -83,6 +83,11 @@ const App = () => {
     setBlogs(blogs.map(blog => blog.id === modifiedBlog.id ? modifiedBlog : blog));
   }
 
+  const removeBlog = async (blogObj) => {
+    await blogService.deleteBlog(blogObj);
+    setBlogs(blogs.filter(blog => blog.id !== blogObj.id));
+  };
+
   return (
     <>
     <Notification message={message} type={notifType} />
@@ -103,7 +108,11 @@ const App = () => {
             addBlog={addBlog}
           />
         </Toggable>
-        <BlogList blogs={blogs} addLike={addLike}/>
+        <BlogList
+          blogs={blogs}
+          addLike={addLike}
+          removeBlog={removeBlog}
+        />
         </div>
     }
     </>
