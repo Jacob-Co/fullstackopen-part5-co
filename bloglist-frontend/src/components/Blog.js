@@ -28,11 +28,13 @@ const Blog = ({ blog, addLike, removeBlog }) => {
 
   return (
     <div style={blogStyle}>
-      {blog.title} {blog.author}
-      <button onClick={toggelVisibility}>
-        {visible ? 'hide' : 'view'}
-      </button>
-      <div style={showIfVisible}>
+      <div className="blogBasics">
+        {blog.title} {blog.author}
+        <button onClick={toggelVisibility}>
+          {visible ? 'hide' : 'view'}
+        </button>
+      </div>
+      <div style={showIfVisible} className="blogDetails">
         <div>
           {blog.url}
         </div>
