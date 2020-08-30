@@ -9,6 +9,7 @@ const Login = ({ handleSubmit, username, handleUsernameChange, password, handleP
         <input
           type="text"
           name="Username"
+          id="username"
           value={username}
           onChange={({ target }) => handleUsernameChange(target.value)}
         />
@@ -18,6 +19,7 @@ const Login = ({ handleSubmit, username, handleUsernameChange, password, handleP
         <input
           type="password"
           name="Password"
+          id="password"
           value={password}
           onChange={({ target }) => handlePasswordChange(target.value)}
         />
