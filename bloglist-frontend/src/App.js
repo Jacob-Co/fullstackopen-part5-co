@@ -16,7 +16,7 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
-  const localStorageKey = 'localBloggAppUser';
+  const localStorageKey = 'localBlogAppUser';
   const [message, setMessage] = useState(null);
   const [notifType, setNotifType] = useState(null);
 

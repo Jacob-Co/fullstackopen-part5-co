@@ -42,27 +42,45 @@ describe('Blog app', function() {
         username: 'Test',
         password: '1234'
       }).then((res) => {
-        window.localStorage.setItem('localBloggAppUser', JSON.stringify(res.body));
+        window.localStorage.setItem('localBlogAppUser', JSON.stringify(res.body));
       });
 
       cy.visit('http://localhost:3000');
     });
 
-    it.only('A blog can be created', function() {
+    it('A blog can be created', function() {
       cy.contains('create a new blog').click();
       cy.get('#title').type('Test Blog');
       cy.get('#author').type('Me');
       cy.get('#url').type('Test.com');
-      cy.get('#blog-create-button').click();
+      cy.get('#blogCreate-button').click();
       cy.contains('Test Blog Me');
     });
 
-    // describe('With a few notes created', function() {
-    //   beforeEach(function() {
-    //     cy.request({
-    //       url: 'http://localhost:3001/api/blogs'
-    //     })
-    //   });
-    // })
+    describe('With a few notes created', function() {
+      beforeEach(function() {
+        cy.request({
+          url: 'http://localhost:3001/api/blogs',
+          method: 'POST',
+          body: {
+            title: 'For the likes',
+            author: 'Liker',
+            url: 'like.com'
+          },
+          headers: {
+            'Authorization': `bearer ${JSON.parse(window.localStorage.getItem('localBlogAppUser')).token}`
+          }
+        });
+
+        cy.visit('http://localhost:3000');
+      });
+
+      it.only('A blog can be liked', function() {
+        cy.get('.blogDetails-button').click();
+        cy.contains('likes: 0');
+        cy.get('.like-button').click();
+        cy.contains('likes: 1');
+      });
+    });
   });
 });
