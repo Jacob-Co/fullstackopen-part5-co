@@ -8,7 +8,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=prod node index.js",
     "dev": "cross-env NODE_ENV=dev nodemon index.js",
-    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
+    "jest-test": "cross-env NODE_ENV=test jest --verbose --runInBand",
+    "cpyress-test": "cross-env NODE_ENV=test nodemon index.js"
   },
   "author": "",
   "license": "ISC",
