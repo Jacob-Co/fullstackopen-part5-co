@@ -1,10 +1,10 @@
 describe('Blog app', function() {
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3001/api/testing/reset');
-    cy.request('POST', 'http://localhost:3001/api/users', {
+    cy.createUser({
       username: 'Test',
       password: '1234',
-      name: 'Tester',
+      name: 'Tester'
     });
     cy.visit('http://localhost:3000');
   });
@@ -38,13 +38,7 @@ describe('Blog app', function() {
 
   describe('When logged in', function() {
     beforeEach(function() {
-      cy.request('POST', 'http://localhost:3001/api/login', {
-        username: 'Test',
-        password: '1234'
-      }).then((res) => {
-        window.localStorage.setItem('localBlogAppUser', JSON.stringify(res.body));
-      });
-
+      cy.login({ username: 'Test', password: '1234' });
       cy.visit('http://localhost:3000');
     });
 
@@ -59,27 +53,66 @@ describe('Blog app', function() {
 
     describe('With a few notes created', function() {
       beforeEach(function() {
-        cy.request({
-          url: 'http://localhost:3001/api/blogs',
-          method: 'POST',
-          body: {
-            title: 'For the likes',
-            author: 'Liker',
-            url: 'like.com'
-          },
-          headers: {
-            'Authorization': `bearer ${JSON.parse(window.localStorage.getItem('localBlogAppUser')).token}`
-          }
+        cy.createNote( {
+          title: 'For the likes',
+          author: 'Liker',
+          url: 'like.com'
         });
 
         cy.visit('http://localhost:3000');
       });
 
-      it.only('A blog can be liked', function() {
-        cy.get('.blogDetails-button').click();
+      it('A blog can be liked', function() {
         cy.contains('likes: 0');
-        cy.get('.like-button').click();
+        cy.addLikes({ content: 'For the likes Liker', likes: 1 });
         cy.contains('likes: 1');
+      });
+
+      it('A blog can be deleted', function() {
+        cy.get('html').should('contain', 'For the likes Liker');
+        cy.get('.blogDetails-button').click();
+        cy.get('.delete-button').click();
+        cy.get('html').should('not.contain', 'For the likes Liker');
+      });
+
+      it('Can\'t delete a blog you didn\'t create', function() {
+        cy.createUser({
+          username: 'Test2',
+          password: '12342',
+          name: 'Tester2'
+        });
+        cy.contains('logout').click();
+        cy.login({ username: 'Test2', password: '12342' });
+        cy.visit('http://localhost:3000');
+
+        cy.get('.blogDetails-button').click();
+        cy.get('.delete-button').click();
+        cy.get('.warning').should('contain', 'You don\'t have permission to delete that');
+        cy.get('.warning').should('have.css', 'color', 'rgb(255, 0, 0)');
+      });
+
+      it.only('Sorts blogs by likes from most to least', function() {
+        cy.createNote({ title: '3 likes', author: 'Liker', url: 'like.com' });
+        cy.createNote({ title: '2 likes', author: 'Liker', url: 'like.com' });
+        cy.createNote({ title: '1 likes', author: 'Liker', url: 'like.com' });
+        cy.visit('http://localhost:3000');
+
+        cy.addLikes({ content: '3 likes Liker', likes: 3 });
+        cy.addLikes({ content: '2 likes Liker', likes: 2 });
+        cy.addLikes({ content: '1 likes Liker', likes: 1 });
+
+        cy.get('.blog')
+          .then((res) => res[0])
+          .should('contain', '3 likes Liker');
+        cy.get('.blog')
+          .then((res) => res[0])
+          .should('not.contain', '2 likes Liker');
+        cy.get('.blog')
+          .then((res) => res[1])
+          .should('contain', '2 likes Liker');
+        cy.get('.blog')
+          .then((res) => res[2])
+          .should('contain', '1 likes Liker');
       });
     });
   });

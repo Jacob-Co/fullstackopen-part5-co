@@ -9,7 +9,7 @@ const BlogList = ({ blogs, addLike, removeBlog }) => {
   const blogsByLikes = blogs.sort(sortByLikes);
 
   return (
-    <div>
+    <div id="blogList">
       <h2>blogs</h2>
       {blogsByLikes.map(blog =>
         <Blog

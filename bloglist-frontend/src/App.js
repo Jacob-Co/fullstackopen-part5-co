@@ -84,8 +84,12 @@ const App = () => {
   };
 
   const removeBlog = async (blogObj) => {
-    await blogService.deleteBlog(blogObj);
-    setBlogs(blogs.filter(blog => blog.id !== blogObj.id));
+    try {
+      await blogService.deleteBlog(blogObj);
+      setBlogs(blogs.filter(blog => blog.id !== blogObj.id));
+    } catch (e) {
+      setNotification('You don\'t have permission to delete that', 'warning');
+    }
   };
 
   return (

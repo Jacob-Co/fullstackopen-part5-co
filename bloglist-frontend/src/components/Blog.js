@@ -27,7 +27,7 @@ const Blog = ({ blog, addLike, removeBlog }) => {
   };
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       <div className="blogBasics">
         {blog.title} {blog.author}
         <button className="blogDetails-button" onClick={toggelVisibility}>
@@ -45,7 +45,7 @@ const Blog = ({ blog, addLike, removeBlog }) => {
         <div>
           {blog.user.name}
         </div>
-        <button onClick={handleRemove}>remove</button>
+        <button className="delete-button" onClick={handleRemove}>remove</button>
       </div>
     </div>
   );
